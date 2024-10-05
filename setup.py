@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="tiny_sqlite_orm",
-    version="0.1.0",
+    version="1.0.0",
     author="Felifelps",
     author_email="felifelps.dev@gmail.com",
     description="A simple ORM for SQLite databases in Python",
