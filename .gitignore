@@ -1,3 +1,4 @@
 **/__pycache__
 build
-sqlite_orm.egg-info
+dist
+tiny_sqlite_orm.egg-info

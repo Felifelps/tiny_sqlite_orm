@@ -1,4 +1,4 @@
-# sqlite_orm
+# tiny_sqlite_orm
 
 A simple ORM (Object-Relational Mapping) library for interacting with SQLite databases in Python, allowing you to work with your data in an object-oriented manner. The library focuses on simplicity and ease of use for small projects.
 
