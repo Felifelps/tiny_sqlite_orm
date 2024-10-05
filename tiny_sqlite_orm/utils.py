@@ -9,6 +9,7 @@ class Utils:
         'gt': '{column} > {value}',
         'ge': '{column} >= {value}',
         'ne': '{column} <> {value}',
+        'in': '{column} IN {value_as_tuple}',
         'contains': 'instr({column}, {value}) > 0',
         'icontains': '{column} LIKE \'%{raw_value}%\''
     }
@@ -25,22 +26,21 @@ class Utils:
 
         return str(value)
 
-    def format_iterable_as_sql_tuple(items):
+    def format_as_sql_columns_tuple(items):
         return f"({', '.join(items)})"
 
-    def convert_values_to_sql_safe_format(values):
-        return map(
+    def format_as_sql_values_tuple(items):
+        items = map(
             Utils.convert_to_sql_type,
-            values
+            items
         )
+        return f"({', '.join(items)})"
 
     def parse_fields_for_insert(**fields):
         if not fields:
             return 'DEFAULT', ''
-        columns = Utils.format_iterable_as_sql_tuple(fields.keys())
-        values = Utils.format_iterable_as_sql_tuple(
-            Utils.convert_values_to_sql_safe_format(fields.values())
-        )
+        columns = Utils.format_as_sql_columns_tuple(fields.keys())
+        values = Utils.format_as_sql_values_tuple(fields.values())
         return columns, values
 
     def parse_fields_for_update(**fields):
@@ -62,6 +62,12 @@ class Utils:
             return where_text.format(
                 column=column,
                 raw_value=value
+            )
+        elif '{value_as_tuple}' in where_text:
+            value = Utils.format_as_sql_values_tuple(value)
+            return where_text.format(
+                column=column,
+                value_as_tuple=value
             )
 
         return where_text.format(

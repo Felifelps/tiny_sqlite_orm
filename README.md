@@ -10,11 +10,11 @@ You can install it by running:
 pip install tiny_sqlite_orm
 ```
 
-## How to use
+## How to Use
 
-### Setting up the database connection
+### Setting Up the Database Connection
 
-First, you need to create an instance of the `Database` class to connect to the SQLite database.
+First, create an instance of the `Database` class to connect to the SQLite database.
 
 ```python
 from sqlite_orm.database import Database
@@ -38,10 +38,9 @@ class User(Table):
     # Table fields
     name = TextField(unique=True)
     age = IntegerField()
-    
 ```
 
-### Creating the tables
+### Creating the Tables
 
 After defining your models, you can create the tables in the database:
 
@@ -50,41 +49,40 @@ After defining your models, you can create the tables in the database:
 db.create_tables_if_not_exists([User])
 ```
 
-### Inserting data
+### Inserting Data
 
 You can insert new records into the database by running:
 
 ```python
 # Create a new user
 user = User.create(name="John", age=30)
-user.name
-# Returns: John
+print(user.name)  # Returns: John
 ```
 
-### Selecting data
+### Selecting Data
 
 To query data from the database, you can use the `select` method:
 
 ```python
-# Fetch users with age greater or
-# equal (__ge) than 15
-users = User.objects.select(
-    age__ge=15
-)
+# Fetch users with age greater than or equal to 15
+users = User.objects.select(age__ge=15)
 
 # Iterate over the results
 for user in users:
     print(user.name, user.age)
 
-users.first()
-users.last()
+# Access the first and last user
+first_user = users.first()
+last_user = users.last()
 ```
 
-### Updating records
+See more about using [select filters.](#using-select-filters)
+
+### Updating Records
 
 To update a record, you can:
 
-- modify the object's attributes and call the `save` method again:
+- Modify the object's attributes and call the `save` method:
 
 ```python
 user = User.objects.select(name="John").first()
@@ -93,18 +91,18 @@ if user:
     user.save()
 ```
 
-- use the `Table.objects.update()` method:
+- Use the `Table.objects.update()` method:
 
 ```python
 User.objects.update(
     # Updates the age to 31
     fields={'age': 31},
     # Where name is "John"
-    name="Jonh"
+    name="John"
 )
 ```
 
-### Deleting records
+### Deleting Records
 
 You can delete a record by calling the `delete` method on the object:
 
@@ -115,17 +113,16 @@ if user:
     user.delete()
 ```
 
-Or using the delete method:
+Or you can delete records using the delete method:
 
 ```python
-# Delete all users with
-# name John
+# Delete all users with the name John
 User.objects.delete(name="John")
 ```
 
 ### Using ForeignKey
 
-You can also define foreign key relationships between models. Here's an example with a `Post` model referencing a `User`:
+You can define foreign key relationships between models. Here's an example with a `Post` model referencing a `User`:
 
 ```python
 from sqlite_orm.field import ForeignKeyField
@@ -135,7 +132,6 @@ class Post(Table):
     db = db
     title = TextField()
     author = ForeignKeyField(User)
-    
 
 # Create the Post table
 db.create_tables_if_not_exists([Post])
@@ -144,7 +140,7 @@ db.create_tables_if_not_exists([Post])
 Post.create(title="My first post", author=user)
 ```
 
-### Aggregations Support
+### Aggregation Support
 
 The library supports aggregation operations such as `count`, `sum`, `avg`, `max`, and `min`:
 
@@ -159,9 +155,46 @@ print(f'Total users: {total_users}')
 print(f'Average age: {average_age}')
 ```
 
+### Using Select Filters
+
+This method supports a variety of filters using `__` (double underscore) syntax to specify conditions. Here are some common operators you can use:
+
+- `No filters`: Checks for equality (e.g., `field=value`).
+- `field__ne`: Checks for inequality (e.g., `field__ne=value`).
+- `field__gt`: Checks if the field is greater than a value (e.g., `field__gt=value`).
+- `field__ge`: Checks if the field is greater than or equal to a value (e.g., `field__ge=value`).
+- `field__lt`: Checks if the field is less than a value (e.g., `field__lt=value`).
+- `field__le`: Checks if the field is less than or equal to a value (e.g., `field__le=value`).
+- `field__in`: Checks if the field is in one of the values passed (e.g., `field__in=[1, 2, 'test']`).
+
+The two below only work for string fields:
+- `field__contains`: Checks if the field's value contains the value (case sensitive) (e.g., `field__contains="a"`).
+- `field__icontains`: Also checks if the field's value contains the value, but is case insensitive.
+
+Here’s an example of how to use these operators in a query:
+
+```python
+# Fetch users with age greater than or equal to 15
+users = User.objects.select(age__ge=15)
+
+# Fetch users whose name starts with exactly 'Jo'
+users_with_Jo = User.objects.select(name__contains='Jo')
+
+# Fetch users whose age is either 25 or 30
+users_25_or_30 = User.objects.select(age__in=[25, 30])
+
+# Iterate over the results
+for user in users:
+    print(user.name, user.age)
+
+# Access the first and last user
+first_user = users.first()
+last_user = users.last()
+```
+
 ## Contributions
 
-Contributions are welcome! Feel free to open a PR or suggest improvements.
+Contributions are welcome! Feel free to open a pull request or suggest improvements.
 
 ## License
 
