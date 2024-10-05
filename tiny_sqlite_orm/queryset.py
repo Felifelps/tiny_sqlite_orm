@@ -93,7 +93,7 @@ class Queryset:
         self.table.db._conn.commit()
 
         if format_function is not None:
-            data = [format_function(result)]
+            return format_function(result)
         else:
             data = [
                 self.__gen_record_by_query_result(

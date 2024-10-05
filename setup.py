@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+with open("README.md", "r", encoding="utf-8") as file:
+    long_description = file.read()
 
 setup(
     name="tiny_sqlite_orm",
-    version="1.0.0",
+    version="1.1.0",
     author="Felifelps",
     author_email="felifelps.dev@gmail.com",
     description="A simple ORM for SQLite databases in Python",

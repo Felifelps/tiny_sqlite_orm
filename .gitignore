@@ -4,3 +4,4 @@ dist
 tiny_sqlite_orm.egg-info
 test.py
 **.db
+**.bat
