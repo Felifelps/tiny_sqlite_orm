@@ -4,7 +4,11 @@ A simple ORM (Object-Relational Mapping) library for interacting with SQLite dat
 
 ## Installation
 
-To use the library, simply copy the files to your project. There are no external dependencies aside from SQLite, which comes with the standard Python installation.
+You can install it by running:
+
+```bash
+pip install tiny_sqlite_orm
+```
 
 ## How to use
 
