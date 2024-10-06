@@ -11,7 +11,7 @@ class Utils:
         'ne': '{column} <> {value}',
         'in': '{column} IN {value_as_tuple}',
         'contains': 'instr({column}, {value}) > 0',
-        'icontains': '{column} LIKE \'%{raw_value}%\''
+        'icontains': '{column} LIKE lower(\'%{raw_value}%\')'
     }
 
     def convert_to_sql_type(value):
@@ -63,6 +63,7 @@ class Utils:
                 column=column,
                 raw_value=value
             )
+
         elif '{value_as_tuple}' in where_text:
             value = Utils.format_as_sql_values_tuple(value)
             return where_text.format(

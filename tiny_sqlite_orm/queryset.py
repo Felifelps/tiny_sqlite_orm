@@ -65,7 +65,7 @@ class Queryset:
         where = self.__get_where_clause_by_query(query)
         return self.__execute(
             f'SELECT {function}({column}) FROM {{table_name}} WHERE {where};',
-            format_function=lambda result: tuple(result)[0][0],
+            format_function=lambda result: tuple(result)[0][0] or 0,
         )
 
     def __get_where_clause_by_query(self, query):

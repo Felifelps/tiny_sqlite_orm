@@ -1,46 +1,32 @@
 import unittest
-from tests.fixtures import DatabaseTestCase
-from tiny_sqlite_orm.table import Table
-from tiny_sqlite_orm.field import TextField, IntegerField
+from tests.fixtures import TestCaseWithTables
 
 
-class TestTable(DatabaseTestCase):
+class TestTable(TestCaseWithTables):
 
-    def setUp(self):
-        self.table = type(
-            'User',
-            (Table, ),
-            {'name': TextField(unique=True),
-             'age': IntegerField(),
-             'db': self.db}
-        )
-        self.db.create_tables_if_not_exists([self.table])
+    def test_primary_key(self):
+        self.assertIs(self.table_with_pk.pk, self.table_with_pk.username)
+        self.assertIs(self.table_with_id.pk, self.table_with_id.id)
 
-    def test_a_create_user(self):
-        user = self.table.create(name="John", age=30)
-        self.assertEqual(user.name, "John")
-        self.assertEqual(user.age, 30)
+    def test_create_user_with_pk(self):
+        attrs = {'username': 'User1'}
+        user = self.table_with_pk.create(**attrs)
+        self.assertIsNotNone(user, 'User not created with PK')
+        self.assertDictEqual(user.attrs, attrs)
 
-    def test_b_select_user(self):
-        user = self.__get_test_user()
-        self.assertIsNotNone(user)
-        self.assertEqual(user.name, "John")
+    def test_create_user_with_auto_id(self):
+        attrs = {'username': 'User1'}
+        user = self.table_with_id.create(**attrs)
+        self.assertIsNotNone(user, 'User not created with auto ID')
+        self.assertDictEqual(user.attrs, {**attrs, 'id': 1})
 
-    def __get_test_user(self):
-        return self.table.objects.select(name="John").first()
+    def test_schema_generation(self):
+        expected_pk_schema = 'CREATE TABLE IF NOT EXISTS withpk (username TEXT PRIMARY KEY);'
+        expected_id_schema = 'CREATE TABLE IF NOT EXISTS withid (username TEXT UNIQUE, id INTEGER PRIMARY KEY AUTOINCREMENT);'
 
-    def test_c_update_user(self):
-        user = self.__get_test_user()
-        user.age = 31
-        user.save()
-        updated_user = self.__get_test_user()
-        self.assertEqual(updated_user.age, 31)
-
-    def test_d_delete_user(self):
-        user = self.__get_test_user()
-        user.delete()
-        deleted_user = self.__get_test_user()
-        self.assertIsNone(deleted_user)
+        self.assertEqual(self.table_with_pk._schema, expected_pk_schema)
+        self.assertEqual(self.table_with_id._schema, expected_id_schema)
 
 if __name__ == '__main__':
+    unittest.TestLoader.sortTestMethodsUsing = None
     unittest.main()
