@@ -113,11 +113,19 @@ class CharField(Field):
 
     def __init__(self, max_length, **kwargs: dict):
         super().__init__(max_length=max_length, **kwargs)
+        self._type = f"{self._type}({self.max_length})"
+
+    def _check_field_value(self, value):
+        super()._check_field_value(value)
+        
+        if len(value) > self.max_length:
+            raise ValueError(
+                f'"{self._name}" field max_length '
+                f'({self.max_length}) exceded'
+            )
 
     def _mount_schema(self):
-        self._type = f"{self._type}({self.max_length})"
         super()._mount_schema()
-        self._type = 'VARCHAR'
 
 
 class DateField(TextField):
@@ -193,8 +201,8 @@ class ForeignKeyField(Field):
 
         schema = self.ref_table.pk._schema
 
-        schema = schema.replace('PRIMARY KEY', '')
-        schema = schema.replace('AUTOINCREMENT', '')
+        schema = schema.replace(' PRIMARY KEY', '')
+        schema = schema.replace(' AUTOINCREMENT', '')
 
         schema_words = schema.split(' ')
         schema_words[0] = self._name

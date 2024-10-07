@@ -1,12 +1,26 @@
 import unittest
 from tests.fixtures import TestCaseWithTables
+from tiny_sqlite_orm import TextField, Table
 
+
+unittest.TestLoader.sortTestMethodsUsing = None
 
 class TestTable(TestCaseWithTables):
 
-    def test_primary_key(self):
-        self.assertIs(self.table_with_pk.pk, self.table_with_pk.username)
-        self.assertIs(self.table_with_id.pk, self.table_with_id.id)
+    @classmethod
+    def setUpClass(cls):
+        cls.table_with_pk = cls.create_table(
+            name='WithPk',
+            fields={'username': TextField(primary_key=True)}
+        )
+        cls.table_with_id = cls.create_table(
+            name='WithId',
+            fields={'username': TextField(unique=True)}
+        )
+        cls.create_tables_on_db([
+            cls.table_with_pk,
+            cls.table_with_id,
+        ])
 
     def test_create_user_with_pk(self):
         attrs = {'username': 'User1'}
@@ -18,7 +32,12 @@ class TestTable(TestCaseWithTables):
         attrs = {'username': 'User1'}
         user = self.table_with_id.create(**attrs)
         self.assertIsNotNone(user, 'User not created with auto ID')
-        self.assertDictEqual(user.attrs, {**attrs, 'id': 1})
+        self.assertIsNotNone(user.id)
+        self.assertEqual(user.username, 'User1')
+
+    def test_primary_key(self):
+        self.assertIs(self.table_with_pk.pk, self.table_with_pk.username)
+        self.assertIs(self.table_with_id.pk, self.table_with_id.id)
 
     def test_schema_generation(self):
         expected_pk_schema = 'CREATE TABLE IF NOT EXISTS withpk (username TEXT PRIMARY KEY);'

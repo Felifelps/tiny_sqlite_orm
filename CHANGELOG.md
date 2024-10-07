@@ -2,25 +2,29 @@
 
 All notable changes to this library will be documented in this file.
 
-## [1.1.0] - 2024-10-05
+## [1.2.0] - 2024-10-07
+
 ### Added
-- New filters for the `objects.select` statement, including support for `__ne`, `__gt`, `__ge`, `__lt`, `__le`, and `__in` operators.
-- String field search options, including `__contains` and `__icontains`.
-- Updated documentation to include examples of new filters.
+- Implemented new field types:
+  - `CharField` with `max_length` validation.
+  - `DateField` with `auto_today` functionality for default date values.
+  - `DatetimeField` with `auto_now` functionality for default datetime values.
+  - `BooleanField` for true/false values.
+  - `ForeignKeyField` for creating relationships between models.
+- Introduced filters for `objects.select` queries:
+  - Support for comparison operators: `__ne`, `__gt`, `__ge`, `__lt`, `__le`.
+  - Support for `__in` operator for matching multiple values.
+  - String field search filters: `__contains` (case-sensitive) and `__icontains` (case-insensitive).
+- Added support for aggregation functions in `Queryset`:
+  - `count`, `sum`, `avg`, `min`, `max`.
 
 ### Changed
-- Restructured code for better clarity.
-- Improved error messages for database operations.
-
-## [1.0.0] - 2024-09-25
-### Added
-- Initial creation of the `tiny_sqlite_orm` library for interacting with SQLite databases in Python.
-- Basic functionalities such as model creation, data insertion and selection, updates, and deletions.
-- Support for foreign key relationships between models.
-- Aggregation functionality with methods like `count`, `avg`, `sum`, `min`, and `max`.
-
-## [0.1.0] - 2024-09-20
-### Added
-- Initial structure of the library.
-- Functionality to connect to an SQLite database.
-- Basic model for data manipulation.
+- Improved schema generation logic for tables, including handling of primary keys (`AutoField`) and foreign keys.
+- Refined error handling and messages for invalid field types and data insertion issues.
+- Enhanced validation mechanisms for fields:
+  - Ensured `CharField` checks for max length.
+  - Added validation for date and datetime format in `DateField` and `DatetimeField`.
+  
+### Fixed
+- Addressed issues with string representation of SQL queries in `Queryset`.
+- Fixed bugs related to table creation with complex field definitions and foreign key relationships.

@@ -192,6 +192,14 @@ first_user = users.first()
 last_user = users.last()
 ```
 
+## Testing
+
+To run tests, run:
+
+```bash
+python run_tests.py
+```
+
 ## Contributions
 
 Contributions are welcome! Feel free to open a pull request or suggest improvements.

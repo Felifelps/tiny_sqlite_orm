@@ -15,8 +15,8 @@ class Utils:
     }
 
     def convert_to_sql_type(value):
-        if isinstance(value, bool):
-            return 'TRUE' if value else 'FALSE'
+        if value is True or value is False:
+            return 'TRUE' if value is True else 'FALSE'
         
         if value is None:
             return 'NULL'
