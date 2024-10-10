@@ -17,7 +17,7 @@ pip install tiny_sqlite_orm
 First, create an instance of the `Database` class to connect to the SQLite database.
 
 ```python
-from sqlite_orm.database import Database
+from tiny_sqlite_orm import Database
 
 # Connect to the database (or create it if it doesn't exist)
 db = Database('my_database.db')
@@ -28,8 +28,7 @@ db = Database('my_database.db')
 Models are defined as subclasses of the `Table` class. Each field in the model is an instance of a `Field` class. Here's an example of how to create a simple model:
 
 ```python
-from sqlite_orm.table import Table
-from sqlite_orm.field import TextField, IntegerField
+from tiny_sqlite_orm import Table, TextField, IntegerField
 
 class User(Table):
     # Bind the database to the model within the class
@@ -125,7 +124,7 @@ User.objects.delete(name="John")
 You can define foreign key relationships between models. Here's an example with a `Post` model referencing a `User`:
 
 ```python
-from sqlite_orm.field import ForeignKeyField
+from tiny_sqlite_orm import ForeignKeyField
 
 class Post(Table):
     # Bind the database within the class
