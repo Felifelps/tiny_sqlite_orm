@@ -5,6 +5,7 @@ from tiny_sqlite_orm import CharField, IntegerField
 
 unittest.TestLoader.sortTestMethodsUsing = None
 
+
 class TestQueryset(TestCaseWithTables):
 
     @classmethod
@@ -19,6 +20,7 @@ class TestQueryset(TestCaseWithTables):
         cls.create_tables_on_db([table])
         cls.user1 = table.create(username='User1', age=30)
         cls.user2 = table.create(username='user2', age=50)
+        cls.user3 = table.create(username='User for delete', age=50)
         cls.queryset = table.objects
 
     def check_select_query(self, expected_query, **select_args):
@@ -104,17 +106,16 @@ class TestQueryset(TestCaseWithTables):
         self.assertEqual(str(query), expected_update_query)
         self.assertEqual(updated_user2.username, 'User2')
 
-    def test_z_delete(self):
-        # Named "test_z" for become the last test
-
+    def test_delete(self):
         expected_delete_query = 'DELETE FROM querysettesting WHERE username = \'User2\';'
         query = self.queryset.delete(
-            username='User2'
+            username=self.user3.username
         )
         deleted_user2 = self.queryset.select(id=self.user2.id).first()
 
         self.assertEqual(str(query), expected_delete_query)
         self.assertIsNone(deleted_user2)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,9 +1,10 @@
 import unittest
 from tests.fixtures import TestCaseWithTables
-from tiny_sqlite_orm import TextField, Table
+from tiny_sqlite_orm import TextField
 
 
 unittest.TestLoader.sortTestMethodsUsing = None
+
 
 class TestTable(TestCaseWithTables):
 
@@ -45,6 +46,7 @@ class TestTable(TestCaseWithTables):
 
         self.assertEqual(self.table_with_pk._schema, expected_pk_schema)
         self.assertEqual(self.table_with_id._schema, expected_id_schema)
+
 
 if __name__ == '__main__':
     unittest.TestLoader.sortTestMethodsUsing = None

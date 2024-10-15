@@ -17,7 +17,7 @@ class Utils:
     def convert_to_sql_type(value):
         if value is True or value is False:
             return 'TRUE' if value is True else 'FALSE'
-        
+
         if value is None:
             return 'NULL'
 
@@ -75,4 +75,3 @@ class Utils:
             column=column,
             value=Utils.convert_to_sql_type(value)
         )
-        

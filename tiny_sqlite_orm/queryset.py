@@ -73,8 +73,9 @@ class Queryset:
             return '1'
 
         where = []
-        if ('SELECT' in self.__last_instruction and
-            'WHERE' in self.__last_instruction):
+        select_in_instruction = 'SELECT' in self.__last_instruction
+        where_in_instruction = 'WHERE' in self.__last_instruction
+        if select_in_instruction and where_in_instruction:
             earlier_where = self.__last_instruction.split(
                 'WHERE '
             )[-1].replace(';', '')

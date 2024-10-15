@@ -4,7 +4,6 @@ from tiny_sqlite_orm import (
     TextField, IntegerField, BooleanField,
     DateField, Table, AutoField, ForeignKeyField
 )
-from tiny_sqlite_orm.database import Database
 from datetime import date
 
 

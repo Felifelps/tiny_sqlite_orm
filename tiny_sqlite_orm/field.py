@@ -38,7 +38,7 @@ class Field:
             value = self._python_type(value)
         except (ValueError, TypeError):
             pass
-        if value is not None and not isinstance(value, self._python_type): 
+        if value is not None and not isinstance(value, self._python_type):
             raise ValueError(
                 f'The "{self._name}" field expected {self._python_type}", not "{type(value)}"'
             )
@@ -76,6 +76,7 @@ class Field:
     def _convert_sql_value_to_python(self, value):
         return self._python_type(value)
 
+
 class IntegerField(Field):
 
     _python_type = int
@@ -87,6 +88,7 @@ class AutoField(IntegerField):
     def _mount_schema(self):
         super()._mount_schema()
         self._Field__schema += ' AUTOINCREMENT'
+
 
 class FloatField(Field):
 
@@ -117,7 +119,7 @@ class CharField(Field):
 
     def _check_field_value(self, value):
         super()._check_field_value(value)
-        
+
         if len(value) > self.max_length:
             raise ValueError(
                 f'"{self._name}" field max_length '

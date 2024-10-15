@@ -4,7 +4,6 @@ from tiny_sqlite_orm.field import (
     IntegerField, AutoField, TextField, CharField,
     BooleanField, DateField, DatetimeField, ForeignKeyField
 )
-from tiny_sqlite_orm.table import Table
 from datetime import date, datetime
 
 
@@ -78,6 +77,7 @@ class TestFieldTypes(TestCaseWithTables):
         field = ForeignKeyField(self.mock_table)
         self.assertEqual(field._type, 'INTEGER')
         self.assertEqual(field._python_type, int)
+
 
 if __name__ == '__main__':
     unittest.main()
