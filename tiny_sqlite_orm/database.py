@@ -12,7 +12,7 @@ class Database:
 
     def create_tables_if_not_exists(self, tables):
         for table in tables:
-            self._conn.execute(table._schema)
+            table._initialize_and_create_table(self)
 
     def disconnect(self):
         self._conn.close()

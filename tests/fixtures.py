@@ -35,5 +35,5 @@ class TestCaseWithTables(TestCaseWithDatabase):
         return type(
             name,
             (Table,),
-            {**fields, 'db': cls.db}
+            {**fields}
         )

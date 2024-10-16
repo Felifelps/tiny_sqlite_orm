@@ -31,8 +31,6 @@ Models are defined as subclasses of the `Table` class. Each field in the model i
 from tiny_sqlite_orm import Table, TextField, IntegerField
 
 class User(Table):
-    # Bind the database to the model within the class
-    db = db
 
     # Table fields
     name = TextField(unique=True)
@@ -127,8 +125,6 @@ You can define foreign key relationships between models. Here's an example with 
 from tiny_sqlite_orm import ForeignKeyField
 
 class Post(Table):
-    # Bind the database within the class
-    db = db
     title = TextField()
     author = ForeignKeyField(User)
 

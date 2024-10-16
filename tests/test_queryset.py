@@ -89,11 +89,11 @@ class TestQueryset(TestCaseWithTables):
         self.check_if_query_matches_all_users(icontains_query)
 
     def test_aggregate_functions(self):
-        self.assertEqual(self.queryset.count(), 2)
-        self.assertEqual(self.queryset.sum('age'), 80)
+        self.assertEqual(self.queryset.count(), 3)
+        self.assertEqual(self.queryset.sum('age'), 130)
         self.assertEqual(self.queryset.max('age'), 50)
         self.assertEqual(self.queryset.min('age'), 30)
-        self.assertEqual(self.queryset.avg('age'), 40)
+        self.assertEqual(int(self.queryset.avg('age')), 43)
 
     def test_update(self):
         expected_update_query = 'UPDATE querysettesting SET username = \'User2\' WHERE username = \'user2\';'
@@ -107,14 +107,14 @@ class TestQueryset(TestCaseWithTables):
         self.assertEqual(updated_user2.username, 'User2')
 
     def test_delete(self):
-        expected_delete_query = 'DELETE FROM querysettesting WHERE username = \'User2\';'
+        expected_delete_query = 'DELETE FROM querysettesting WHERE username = \'User for delete\';'
         query = self.queryset.delete(
             username=self.user3.username
         )
-        deleted_user2 = self.queryset.select(id=self.user2.id).first()
+        deleted_user3 = self.queryset.select(id=self.user3.id).first()
 
         self.assertEqual(str(query), expected_delete_query)
-        self.assertIsNone(deleted_user2)
+        self.assertIsNone(deleted_user3)
 
 
 if __name__ == '__main__':

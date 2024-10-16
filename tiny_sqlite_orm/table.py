@@ -1,27 +1,22 @@
 from .field import Field, AutoField
 from .queryset import Queryset
-from .database import Database
 
 
 class Table:
 
     db = None
+    _schema = None
 
     @classmethod
     def create(cls, **kwargs) -> None:
         return cls.objects.insert(**kwargs)
 
+    @classmethod
+    def _initialize_and_create_table(cls, db):
+        cls.db = db
+        db._conn.execute(cls._schema)
+
     def __init_subclass__(cls):
-        cls.__check_if_db_is_defined()
-        cls.__initialize()
-
-    @classmethod
-    def __check_if_db_is_defined(cls):
-        if not isinstance(cls.db, Database):
-            raise AttributeError('Set "Table.db" attribute to a "Database" object when inherit from "Table" class')
-
-    @classmethod
-    def __initialize(cls):
         cls.__set_attributes()
         cls.__set_fields_name()
         cls.__handle_primary_key()
