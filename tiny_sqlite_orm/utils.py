@@ -1,4 +1,5 @@
 from datetime import date
+from tiny_sqlite_orm.record import Record
 
 
 class Utils:
@@ -23,6 +24,11 @@ class Utils:
 
         if isinstance(value, str) or isinstance(value, date):
             return f'\'{value}\''
+
+        if isinstance(value, Record):
+            return Utils.convert_to_sql_type(
+                value.pk
+            )
 
         return str(value)
 
